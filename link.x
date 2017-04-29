@@ -2,7 +2,7 @@ INCLUDE memory.x
 
 SECTIONS
 {
-  .text ORIGIN(FLASH) :
+  .text ORIGIN(TARGET) :
   {
     /* Vector table */
     _VECTOR_TABLE = .;
@@ -17,7 +17,7 @@ SECTIONS
 
     *(.text.*);
     *(.rodata.*);
-  } > FLASH
+  } > TARGET
 
   .bss : ALIGN(4)
   {
@@ -31,7 +31,7 @@ SECTIONS
     _sdata = .;
     *(.data.*);
     _edata = ALIGN(4);
-  } > RAM AT > FLASH
+  } > RAM AT > TARGET
 
   _sidata = LOADADDR(.data);
 
@@ -44,14 +44,14 @@ SECTIONS
 }
 
 /* Do not exceed this mark in the error messages below                | */
-ASSERT(__exceptions - ORIGIN(FLASH) > 8, "
+ASSERT(__exceptions - ORIGIN(TARGET) > 8, "
 You must specify the exception handlers.
 Create a non `pub` static variable with type
 `cortex_m::exception::Handlers` and place it in the
 '.rodata.exceptions' section. (cf. #[link_section]). Apply the
 `#[used]` attribute to the variable to make it reach the linker.");
 
-ASSERT(__exceptions - ORIGIN(FLASH) == 0x40, "
+ASSERT(__exceptions - ORIGIN(TARGET) == 0x40, "
 Invalid '.rodata.exceptions' section.
 Make sure to place a static with type `cortex_m::exception::Handlers`
 in that section (cf. #[link_section]) ONLY ONCE.");
