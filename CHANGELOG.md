@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.2.5] - 2017-07-04
+
+### Changed
+
+- Fixed the ABI of the panic-fmt lang item included in this crate. This fixes
+  binary bloat when compiling in release mode with LTO enabled.
+
 ## [v0.2.4] - 2017-06-03
 
 ### Added
@@ -95,7 +102,8 @@ section                size        addr
 
 Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-rt/compare/v0.2.4...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-rt/compare/v0.2.5...HEAD
+[v0.2.5]: https://github.com/japaric/cortex-m-rt/compare/v0.2.4...v0.2.5
 [v0.2.4]: https://github.com/japaric/cortex-m-rt/compare/v0.2.3...v0.2.4
 [v0.2.3]: https://github.com/japaric/cortex-m-rt/compare/v0.2.2...v0.2.3
 [v0.2.2]: https://github.com/japaric/cortex-m-rt/compare/v0.2.1...v0.2.2
