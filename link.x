@@ -12,7 +12,7 @@ EXTERN(EXCEPTIONS);
    object file that's passed to the linker *before* this crate */
 EXTERN(INTERRUPTS);
 
-PROVIDE(_stack_start = ORIGIN(RAM) + LENGTH(RAM));
+_eram = ORIGIN(RAM) + LENGTH(RAM);
 
 SECTIONS
 {
@@ -48,22 +48,42 @@ SECTIONS
     . = ALIGN(4);
   } > FLASH
 
+  /* "fake" .bss section, just to get its size */
   .bss : ALIGN(4)
   {
-    _sbss = .;
     *(.bss .bss.*);
     . = ALIGN(4);
-    _ebss = .;
   } > RAM
 
+  /* "fake" .data section, just to get its size */
   .data : ALIGN(4)
   {
-    _sidata = LOADADDR(.data);
-    _sdata = .;
     *(.data .data.*);
     . = ALIGN(4);
-    _edata = .;
   } > RAM AT > FLASH
+
+  /* create the variables that RAM initialization will use */
+  /* here we create the following memory layout */
+  /*                                            */
+  /*  _ebss +-------+ ORIGIN(RAM) + LENGTH(RAM) */
+  /*        | .bss  |                           */
+  /* _edata +-------+ _sbss                     */
+  /*        | .data |                           */
+  /* _sdata +-------+                           */
+  /*        |       |                           */
+  /*        |       |                           */
+  /*        | STACK |                           */
+  /*        |       |                           */
+  /*        |       |                           */
+  /*        +-------+ ORIGIN(RAM)               */
+  _sbss = _eram - SIZEOF(.bss);
+  _ebss = _eram;
+
+  _sdata = _eram - SIZEOF(.bss) - SIZEOF(.data);
+  _edata = _sbss;
+  _sidata = LOADADDR(.data);
+
+  PROVIDE(_stack_start = _sdata);
 
   /* fake output .got section */
   /* Dynamic relocations are unsupported. This section is only used to detect
@@ -95,37 +115,37 @@ SECTIONS
 }
 
 /* Do not exceed this mark in the error messages below                | */
-ASSERT(_eexceptions - ORIGIN(FLASH) > 8, "
-The exception handlers are missing. This is likely a cortex-m-rt bug.
-Please file a bug report at:
-https://github.com/japaric/cortex-m-rt/issues");
+/* ASSERT(_eexceptions - ORIGIN(FLASH) > 8, " */
+/* The exception handlers are missing. This is likely a cortex-m-rt bug. */
+/* Please file a bug report at: */
+/* https://github.com/japaric/cortex-m-rt/issues"); */
 
-ASSERT(_eexceptions - ORIGIN(FLASH) == 0x40, "
-Invalid '.vector_table.exceptions' section. This is likely a
-cortex-m-rt bug. Please file a bug report at:
-https://github.com/japaric/cortex-m-rt/issues");
+/* ASSERT(_eexceptions - ORIGIN(FLASH) == 0x40, " */
+/* Invalid '.vector_table.exceptions' section. This is likely a */
+/* cortex-m-rt bug. Please file a bug report at: */
+/* https://github.com/japaric/cortex-m-rt/issues"); */
 
-ASSERT(_einterrupts - _eexceptions > 0, "
-The interrupt handlers are missing. If you are not linking to a device
-crate then you supply the interrupt handlers yourself. Check the
-documentation.");
+/* ASSERT(_einterrupts - _eexceptions > 0, " */
+/* The interrupt handlers are missing. If you are not linking to a device */
+/* crate then you supply the interrupt handlers yourself. Check the */
+/* documentation."); */
 
-ASSERT(_einterrupts - _eexceptions <= 0x3c0, "
-There can't be more than 240 interrupt handlers. This may be a bug in
-your device crate, or you may have registered more than 240 interrupt
-handlers.");
+/* ASSERT(_einterrupts - _eexceptions <= 0x3c0, " */
+/* There can't be more than 240 interrupt handlers. This may be a bug in */
+/* your device crate, or you may have registered more than 240 interrupt */
+/* handlers."); */
 
-ASSERT(_einterrupts <= _stext, "
-The '.text' section can't be placed inside '.vector_table' section.
-Set '_stext' to an address greater than '_einterrupts'");
+/* ASSERT(_einterrupts <= _stext, " */
+/* The '.text' section can't be placed inside '.vector_table' section. */
+/* Set '_stext' to an address greater than '_einterrupts'"); */
 
-ASSERT(_stext < ORIGIN(FLASH) + LENGTH(FLASH), "
-The '.text' section must be placed inside the FLASH memory
-Set '_stext' to an address smaller than 'ORIGIN(FLASH) + LENGTH(FLASH)");
+/* ASSERT(_stext < ORIGIN(FLASH) + LENGTH(FLASH), " */
+/* The '.text' section must be placed inside the FLASH memory */
+/* Set '_stext' to an address smaller than 'ORIGIN(FLASH) + LENGTH(FLASH)"); */
 
-ASSERT(_sgot == _egot, "
-.got section detected in the input files. Dynamic relocations are not
-supported. If you are linking to C code compiled using the `gcc` crate
-then modify your build script to compile the C code _without_ the
--fPIC flag. See the documentation of the `gcc::Config.fpic` method for
-details.");
+/* ASSERT(_sgot == _egot, " */
+/* .got section detected in the input files. Dynamic relocations are not */
+/* supported. If you are linking to C code compiled using the `gcc` crate */
+/* then modify your build script to compile the C code _without_ the */
+/* -fPIC flag. See the documentation of the `gcc::Config.fpic` method for */
+/* details."); */
