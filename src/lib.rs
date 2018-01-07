@@ -314,6 +314,9 @@ extern "C" {
 
     // Initial values of the .data section (stored in Flash)
     static _sidata: u32;
+
+    static _init_array_start: extern "C" fn();
+    static _init_array_end: extern "C" fn();
 }
 
 #[cfg(target_arch = "arm")]
@@ -327,6 +330,7 @@ static RESET_VECTOR: unsafe extern "C" fn() -> ! = reset_handler;
 #[cfg(target_arch = "arm")]
 #[link_section = ".reset_handler"]
 unsafe extern "C" fn reset_handler() -> ! {
+    r0::run_init_array(&_init_array_start, &_init_array_end);
     r0::zero_bss(&mut _sbss, &mut _ebss);
     r0::init_data(&mut _sdata, &mut _edata, &_sidata);
 

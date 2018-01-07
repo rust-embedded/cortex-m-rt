@@ -39,6 +39,10 @@ SECTIONS
     /* point of the program. */
     KEEP(*(.reset_handler));
 
+    _init_array_start = ALIGN(4);
+    KEEP(*(.init_array));
+    _init_array_end = ALIGN(4);
+
     *(.text .text.*);
   } > FLASH
 
