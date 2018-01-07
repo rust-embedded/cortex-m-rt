@@ -281,12 +281,15 @@
 #![feature(linkage)]
 #![feature(naked_functions)]
 #![feature(used)]
+#![feature(use_extern_macros)]
 #![no_std]
 
 #[cfg(target_arch = "arm")]
 extern crate cortex_m;
 #[cfg(target_arch = "arm")]
 extern crate r0;
+
+pub use r0::init_array;
 
 #[cfg(not(test))]
 mod lang_items;
