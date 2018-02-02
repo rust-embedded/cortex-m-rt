@@ -289,6 +289,7 @@ extern crate cortex_m;
 #[cfg(target_arch = "arm")]
 extern crate r0;
 
+#[cfg(all(feature = "init_array", target_arch = "arm"))]
 pub use r0::init_array;
 
 #[cfg(not(test))]
@@ -333,6 +334,7 @@ static RESET_VECTOR: unsafe extern "C" fn() -> ! = reset_handler;
 #[cfg(target_arch = "arm")]
 #[link_section = ".reset_handler"]
 unsafe extern "C" fn reset_handler() -> ! {
+    #[cfg(feature = "init_array")]
     r0::run_init_array(&_init_array_start, &_init_array_end);
     r0::zero_bss(&mut _sbss, &mut _ebss);
     r0::init_data(&mut _sdata, &mut _edata, &_sidata);
