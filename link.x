@@ -12,6 +12,22 @@ EXTERN(EXCEPTIONS);
    object file that's passed to the linker *before* this crate */
 EXTERN(INTERRUPTS);
 
+/* Here we create a weak aliases for exception handlers. But since DEFAULT_HANDLER is
+   also a weak symbol, we have a weak aliases to a weak symbol. Such configuration is
+   not supported well through language features, so we have to do this in the linker
+   script. See cortex-m-rtfm/issues/39 and cortex-m-rt/issues/58 */
+EXTERN(DEFAULT_HANDLER);
+PROVIDE(NMI = DEFAULT_HANDLER);
+PROVIDE(HARD_FAULT = DEFAULT_HANDLER);
+PROVIDE(MEM_MANAGE = DEFAULT_HANDLER);
+PROVIDE(BUS_FAULT = DEFAULT_HANDLER);
+PROVIDE(USAGE_FAULT = DEFAULT_HANDLER);
+PROVIDE(SVCALL = DEFAULT_HANDLER);
+PROVIDE(PENDSV = DEFAULT_HANDLER);
+PROVIDE(SYS_TICK = DEFAULT_HANDLER);
+/* This handler is not needed on armv6m, but it shouldn't hurt to keed it here anyway */
+PROVIDE(DEBUG_MONITOR = DEFAULT_HANDLER);
+
 PROVIDE(_stack_start = ORIGIN(RAM) + LENGTH(RAM));
 
 SECTIONS
