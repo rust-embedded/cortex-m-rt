@@ -276,7 +276,6 @@
 #![deny(warnings)]
 #![feature(asm)]
 #![feature(core_intrinsics)]
-#![feature(global_asm)]
 #![feature(lang_items)]
 #![feature(linkage)]
 #![feature(naked_functions)]
@@ -365,43 +364,6 @@ unsafe extern "C" fn reset_handler() -> ! {
         asm!("wfi" :::: "volatile");
     }
 }
-
-#[cfg(target_arch = "arm")]
-global_asm!(
-    r#"
-.weak NMI
-NMI = DEFAULT_HANDLER
-
-.weak HARD_FAULT
-HARD_FAULT = DEFAULT_HANDLER
-
-.weak MEM_MANAGE
-MEM_MANAGE = DEFAULT_HANDLER
-
-.weak BUS_FAULT
-BUS_FAULT = DEFAULT_HANDLER
-
-.weak USAGE_FAULT
-USAGE_FAULT = DEFAULT_HANDLER
-
-.weak SVCALL
-SVCALL = DEFAULT_HANDLER
-
-.weak PENDSV
-PENDSV = DEFAULT_HANDLER
-
-.weak SYS_TICK
-SYS_TICK = DEFAULT_HANDLER
-"#
-);
-
-#[cfg(not(armv6m))]
-global_asm!(
-    r#"
-.weak DEBUG_MONITOR
-DEBUG_MONITOR = DEFAULT_HANDLER
-"#
-);
 
 #[cfg(target_arch = "arm")]
 extern "C" {
