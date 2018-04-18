@@ -32,7 +32,7 @@ pub trait Termination {
     fn report(self) -> i32;
 }
 
-impl Termination for () {
+impl Termination for ! {
     fn report(self) -> i32 {
         0
     }

@@ -280,6 +280,7 @@
 #![feature(lang_items)]
 #![feature(linkage)]
 #![feature(naked_functions)]
+#![feature(never_type)]
 #![feature(used)]
 #![no_std]
 
@@ -301,8 +302,10 @@ use cortex_m::exception::ExceptionFrame;
 
 extern "C" {
     // NOTE `rustc` forces this signature on us. See `src/lang_items.rs`
+    // NOTE the return type can only be the never type (`!`) because that's the only type that
+    // implements the `Termination` trait
     #[cfg(target_arch = "arm")]
-    fn main(argc: isize, argv: *const *const u8) -> isize;
+    fn main(argc: isize, argv: *const *const u8) -> !;
 
     // Boundaries of the .bss section
     static mut _ebss: u32;
@@ -335,7 +338,7 @@ unsafe extern "C" fn reset_handler() -> ! {
         () => {
             // Neither `argc` or `argv` make sense in bare metal context so we
             // just stub them
-            main(0, ::core::ptr::null());
+            main(0, ::core::ptr::null())
         }
         #[cfg(has_fpu)]
         () => {
@@ -349,20 +352,14 @@ unsafe extern "C" fn reset_handler() -> ! {
             // be executed *before* enabling the FPU and that would generate an
             // exception
             #[inline(never)]
-            fn main() {
+            fn main() -> ! {
                 unsafe {
-                    ::main(0, ::core::ptr::null());
+                    ::main(0, ::core::ptr::null())
                 }
             }
 
             main()
         }
-    }
-
-    // If `main` returns, then we go into "reactive" mode and simply attend
-    // interrupts as they occur.
-    loop {
-        asm!("wfi" :::: "volatile");
     }
 }
 
