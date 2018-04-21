@@ -281,12 +281,18 @@
 #![feature(linkage)]
 #![feature(naked_functions)]
 #![feature(used)]
+#![feature(use_extern_macros)]
 #![no_std]
 
 #[cfg(target_arch = "arm")]
 extern crate cortex_m;
 #[cfg(target_arch = "arm")]
 extern crate r0;
+
+#[cfg(all(feature = "init_array", target_arch = "arm"))]
+pub use r0::init_array;
+#[cfg(all(feature = "init_array", target_arch = "arm"))]
+pub mod init_array;
 
 #[cfg(not(test))]
 mod lang_items;
@@ -314,6 +320,9 @@ extern "C" {
 
     // Initial values of the .data section (stored in Flash)
     static _sidata: u32;
+
+    static _init_array_start: extern "C" fn();
+    static _init_array_end: extern "C" fn();
 }
 
 #[cfg(target_arch = "arm")]
@@ -327,6 +336,10 @@ static RESET_VECTOR: unsafe extern "C" fn() -> ! = reset_handler;
 #[cfg(target_arch = "arm")]
 #[link_section = ".reset_handler"]
 unsafe extern "C" fn reset_handler() -> ! {
+    #[cfg(feature = "init_array")]
+    r0::run_init_array(&_init_array_start, &_init_array_end);
+    #[cfg(feature = "init_array")]
+    init_array::InitArrayPeripherals::done();
     r0::zero_bss(&mut _sbss, &mut _ebss);
     r0::init_data(&mut _sdata, &mut _edata, &_sidata);
 

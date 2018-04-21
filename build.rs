@@ -8,6 +8,7 @@ fn main() {
 
     has_fpu(&target);
     is_armv6m(&target);
+    is_armv7m(&target);
 
     // Put the linker script somewhere the linker can find it
     let out = &PathBuf::from(env::var_os("OUT_DIR").unwrap());
@@ -30,5 +31,14 @@ fn has_fpu(target: &str) {
 fn is_armv6m(target: &str) {
     if target.starts_with("thumbv6m-") {
         println!("cargo:rustc-cfg=armv6m");
+    }
+}
+
+fn is_armv7m(target: &str) {
+    if target.starts_with("thumbv7m-") {
+        println!("cargo:rustc-cfg=armv7m");
+    } else if target.starts_with("thumbv7em-") {
+        println!("cargo:rustc-cfg=armv7m");
+        //println!("cargo:rustc-cfg=armv7em");
     }
 }
