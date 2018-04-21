@@ -521,7 +521,7 @@ pub enum Exception {
     /// All class of fault.
     HARD_FAULT,
     /// Memory management.
-    MEN_MANAGE,
+    MEM_MANAGE,
     /// Pre-fetch fault, memory access fault.
     BUS_FAULT,
     /// Undefined instruction or illegal state.
