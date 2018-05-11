@@ -120,6 +120,21 @@
 //!     // do something here
 //! }
 //! ```
+//! 
+//! ## `PRE_INIT`
+//!
+//! This weak symbol can be overridden to set a function to be called at the
+//! beginning of the reset handler. It's recommended that you use the
+//! `pre_init!` to do the override, but below is shown how to manually
+//! override the symbol:
+//!
+//! ``` ignore,no_run
+//! #[no_mangle]
+//! pub extern "C" fn PRE_INIT() {
+//!     // do something here
+//! }
+//! ```
+//! 
 //!
 //! ## `.vector_table.interrupts`
 //!
@@ -327,6 +342,7 @@ static RESET_VECTOR: unsafe extern "C" fn() -> ! = reset_handler;
 #[cfg(target_arch = "arm")]
 #[link_section = ".reset_handler"]
 unsafe extern "C" fn reset_handler() -> ! {
+    pre_init();
     r0::zero_bss(&mut _sbss, &mut _ebss);
     r0::init_data(&mut _sdata, &mut _edata, &_sidata);
 
@@ -480,6 +496,19 @@ extern "C" fn default_handler(ef: &ExceptionFrame) -> ! {
 #[used]
 static KEEP: extern "C" fn(&ExceptionFrame) -> ! = default_handler;
 
+/// This function is called at the beginning of the reset handler.
+/// 
+#[allow(unused_variables)]
+#[export_name = "PRE_INIT"]
+#[linkage = "weak"]
+extern "C" fn pre_init() {}
+
+// make sure the compiler emits the PRE_INIT symbol so the linker can
+// find it!
+#[cfg(target_arch = "arm")]
+#[used]
+static KEEP_PRE_INIT: extern "C" fn() = pre_init;
+
 /// This macro lets you override the default exception handler
 ///
 /// The first and only argument to this macro is the path to the function that
@@ -607,6 +636,37 @@ macro_rules! exception {
             // check that the handler exists
             let _ = $crate::Exception::$NAME;
 
+            // type checking
+            let f: fn() = $path;
+            f();
+        }
+    }
+}
+
+/// This macro lets you set a function to be called at the beginning of the reset handler.
+///
+/// The first and only argument to this macro is the path to the function that
+/// will be called at the beginning of the reset handler, before memory is initialized. 
+/// That function must have signature `fn()`
+///
+/// # Examples
+///
+/// ``` ignore
+/// pre_init!(foo::bar);
+///
+/// mod foo {
+///     pub fn bar() {
+///         // do something here
+///     }
+/// }
+/// ```
+#[macro_export]
+macro_rules! pre_init {
+    ($path:path) => {
+        #[allow(non_snake_case)]
+        #[doc(hidden)]
+        #[no_mangle]
+        pub unsafe extern "C" fn PRE_INIT() {
             // type checking
             let f: fn() = $path;
             f();
