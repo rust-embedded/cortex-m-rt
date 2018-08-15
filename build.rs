@@ -12,7 +12,7 @@ fn main() {
     let is_armv6m = is_armv6m(&target);
 
     if target.starts_with("thumbv") {
-        cc::Build::new().file("asm.s").compile("asm");
+        cc::Build::new().file("hardfault.s").compile("asm");
     }
 
     // Put the linker script somewhere the linker can find it
