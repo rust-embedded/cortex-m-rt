@@ -1,8 +1,13 @@
+#[cfg(feature = "abort-on-panic")]
+use core::panic::PanicInfo;
+
 /// Default panic handler
 #[cfg(feature = "abort-on-panic")]
-#[lang = "panic_fmt"]
-unsafe extern "C" fn panic_fmt(_: ::core::fmt::Arguments, _: &'static str, _: u32, _: u32) -> ! {
-    ::core::intrinsics::abort()
+#[lang = "panic_impl"]
+fn panic(_: &PanicInfo) -> ! {
+    unsafe {
+        ::core::intrinsics::abort()
+    }
 }
 
 // Lang item required to make the normal `main` work in applications
