@@ -1,6 +1,10 @@
 set -euxo pipefail
 
 main() {
+    if [ $TARGET = x86_64-unknown-linux-gnu ]; then
+        find . -name '*.md' -print0 | xargs -0 mdcheckr
+    fi
+
     cargo check --target $TARGET
 
     cargo check --target $TARGET --features device

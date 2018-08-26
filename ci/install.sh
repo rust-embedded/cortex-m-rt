@@ -1,6 +1,10 @@
 set -euxo pipefail
 
 main() {
+    curl https://raw.githubusercontent.com/korken89/mdcheckr/master/mdcheckr -o mdcheckr
+    chmod +x mdcheckr
+    sudo cp mdcheckr /usr/local/bin
+
     if [ $TARGET != x86_64-unknown-linux-gnu ]; then
         rustup target add $TARGET
 
