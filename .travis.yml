@@ -4,6 +4,7 @@ addons:
   apt:
     packages:
     - pandoc
+    - libxml2-utils
 
 matrix:
   include:
