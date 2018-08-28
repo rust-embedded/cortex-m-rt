@@ -76,6 +76,9 @@ main() {
 
     if [ $TARGET = x86_64-unknown-linux-gnu ]; then
         ./check-blobs.sh
+
+        # Check Markdown files for broken links
+        find . -name '*.md' -print0 | xargs -0 mdcheckr
     fi
 }
 
