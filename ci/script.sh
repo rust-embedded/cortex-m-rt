@@ -78,7 +78,7 @@ main() {
         ./check-blobs.sh
 
         # Check Markdown files for broken links
-        find . -name '*.md' -print0 | xargs -0 mdcheckr
+        mdcheckr **/*.md
     fi
 }
 
