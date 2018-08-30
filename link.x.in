@@ -115,6 +115,20 @@ SECTIONS
   /* LMA of .data */
   __sidata = LOADADDR(.data);
 
+  .ramfunc : ALIGN(4)
+  {
+    *(.ramfunc.*);
+
+    . = ALIGN(4); /* 4-byte align the end (VMA) of this section */
+  } > RAM AT > FLASH
+
+  /* VMA of .ramfunc */
+  __sramfunc = ADDR(.ramfunc);
+  __eramfunc = ADDR(.ramfunc) + SIZEOF(.ramfunc);
+
+  /* LMA of .ramfunc */
+  __siramfunc = LOADADDR(.ramfunc);
+
   /* ### .bss */
   .bss : ALIGN(4)
   {

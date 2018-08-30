@@ -3,9 +3,11 @@
 extern crate proc_macro;
 #[macro_use]
 extern crate quote;
+extern crate rand;
 #[macro_use]
 extern crate syn;
 
+use rand::Rng;
 use syn::synom::Synom;
 use syn::token::{Colon, Comma, Eq, Static};
 use syn::{Expr, FnArg, Ident, ItemFn, ReturnType, Type, Visibility};
@@ -458,5 +460,58 @@ pub fn pre_init(args: TokenStream, input: TokenStream) -> TokenStream {
         #[export_name = "__pre_init"]
         #(#attrs)*
         pub unsafe fn #ident() #block
+    ).into()
+}
+
+/// Attribute to place a function in RAM
+///
+/// This attribute can *not* be used on generic functions.
+///
+/// # Examples
+///
+/// ```
+/// # use cortex_m_rt_macros::ramfunc;
+/// #[ramfunc]
+/// unsafe fn computation_heavy_function() {
+///     // do something here
+/// }
+///
+/// # fn main() {}
+/// ```
+#[proc_macro_attribute]
+pub fn ramfunc(args: TokenStream, input: TokenStream) -> TokenStream {
+    assert_eq!(
+        args.to_string(),
+        "",
+        "`ramfunc` attribute must have no arguments"
+    );
+
+    let f: ItemFn = syn::parse(input).expect("`#[ramfunc]` must be applied to a function");
+
+    assert!(
+        f.decl.generics.params.is_empty(),
+        "`#[ramfunc]` can't be applied to generic functions"
+    );
+    // because then all instantiations of the function would end in the same linker section and the
+    // linker won't be able to GC the unused ones (read comment below for more details)
+
+    // NOTE we want to put *each* function into a *different* section so the linker is able to GC
+    // unused functions. Unlike the compiler we don't know the crate name or which module this
+    // function is in so we can't use a mangled version of the path to the function -- we don't know
+    // its full path! Instead we'll use a random string for the section name of each function.
+    let mut rng = rand::thread_rng();
+    let hash = (0..16)
+        .map(|_| {
+            if rng.gen() {
+                ('a' as u8 + rng.gen::<u8>() % 25) as char
+            } else {
+                ('0' as u8 + rng.gen::<u8>() % 10) as char
+            }
+        }).collect::<String>();
+    let section_name = format!(".ramfunc.{}", hash);
+
+    quote!(
+        #[link_section = #section_name]
+        #f
     ).into()
 }

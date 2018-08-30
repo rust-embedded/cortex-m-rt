@@ -387,7 +387,7 @@ extern crate r0;
 use core::fmt;
 use core::sync::atomic::{self, Ordering};
 
-pub use macros::{entry, exception, pre_init};
+pub use macros::{entry, exception, pre_init, ramfunc};
 
 /// Registers stacked (pushed into the stack) during an exception
 #[derive(Clone, Copy)]
@@ -470,6 +470,9 @@ pub unsafe extern "C" fn Reset() -> ! {
         static mut __edata: u32;
         static __sidata: u32;
 
+        static mut __sramfunc: u32;
+        static mut __eramfunc: u32;
+        static __siramfunc: u32;
     }
 
     extern "Rust" {
@@ -484,7 +487,9 @@ pub unsafe extern "C" fn Reset() -> ! {
 
     // Initialize RAM
     r0::zero_bss(&mut __sbss, &mut __ebss);
+    // XXX is there a reliable way to do a single `init_data` to initialize both .data and .ramfunc
     r0::init_data(&mut __sdata, &mut __edata, &__sidata);
+    r0::init_data(&mut __sramfunc, &mut __eramfunc, &__siramfunc);
 
     match () {
         #[cfg(not(has_fpu))]
