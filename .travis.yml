@@ -7,8 +7,8 @@ matrix:
       addons:
         apt:
           packages:
-          - pandoc
-          - libxml2-utils
+            - pandoc
+            - libxml2-utils
       rust: stable
       if: (branch = staging OR branch = trying) OR (type = pull_request AND branch = master)
 
