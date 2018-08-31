@@ -469,13 +469,27 @@ pub fn pre_init(args: TokenStream, input: TokenStream) -> TokenStream {
 ///
 /// # Examples
 ///
+/// You can put plain functions in RAM
+///
 /// ```
 /// # use cortex_m_rt_macros::ramfunc;
 /// #[ramfunc]
-/// unsafe fn computation_heavy_function() {
+/// fn computation_heavy_function(data: &[u8]) -> u32 {
+///     // do something here
+/// #   0
+/// }
+/// # fn main() {}
+/// ```
+///
+/// And you can also put exception handlers in RAM.
+///
+/// ```
+/// # use cortex_m_rt_macros::{exception, ramfunc};
+/// #[exception(SysTick)]
+/// #[ramfunc]
+/// fn handler() {
 ///     // do something here
 /// }
-///
 /// # fn main() {}
 /// ```
 #[proc_macro_attribute]
