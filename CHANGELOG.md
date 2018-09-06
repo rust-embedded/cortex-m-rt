@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.5.4] - 2018-09-07
+
+### Changed
+
+- Produce a better error message if two (or more) copies of `cortex-m-rt` are
+  going to be linked into a binary.
+
 ## [v0.5.3] - 2018-08-27
 
 ### Changed

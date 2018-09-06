@@ -402,6 +402,10 @@ extern crate r0;
 use core::fmt;
 use core::sync::atomic::{self, Ordering};
 
+#[export_name = "error: cortex-m-rt appears more than once in the dependency graph"]
+#[doc(hidden)]
+pub static __ONCE__: () = ();
+
 /// Registers stacked (pushed into the stack) during an exception
 #[derive(Clone, Copy)]
 #[repr(C)]
