@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["heap_start","Returns a pointer to the start of the heap"]],"struct":[["ExceptionFrame","Registers stacked (pushed into the stack) during an exception"]]});
