@@ -472,7 +472,6 @@ pub static __RESET_VECTOR: unsafe extern "C" fn() -> ! = Reset;
 #[no_mangle]
 pub unsafe extern "C" fn Reset() -> ! {
     extern "C" {
-
         // These symbols come from `link.x`
         static mut __sbss: u32;
         static mut __ebss: u32;
@@ -480,10 +479,14 @@ pub unsafe extern "C" fn Reset() -> ! {
         static mut __sdata: u32;
         static mut __edata: u32;
         static __sidata: u32;
-
     }
 
     extern "Rust" {
+        // RAM initialization routines. These are written in assembly because LLVM optimizations
+        // loop unroll pure Rust versions making them occupy too much Flash (~500 bytes)
+        fn __zero_bss(sbss: *mut u32, ebss: *mut u32);
+        fn __init_data(sdata: *mut u32, sidata: *const u32, edata: *mut u32);
+
         // This symbol will be provided by the user via `#[entry]`
         fn main() -> !;
 
@@ -494,8 +497,8 @@ pub unsafe extern "C" fn Reset() -> ! {
     __pre_init();
 
     // Initialize RAM
-    r0::zero_bss(&mut __sbss, &mut __ebss);
-    r0::init_data(&mut __sdata, &mut __edata, &__sidata);
+    __zero_bss(&mut __sbss, &mut __ebss);
+    __init_data(&mut __sdata, &__sidata, &mut __edata);
 
     match () {
         #[cfg(not(has_fpu))]
