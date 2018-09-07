@@ -8,7 +8,7 @@ keywords = ["arm", "cortex-m", "runtime", "startup"]
 license = "MIT OR Apache-2.0"
 name = "cortex-m-rt"
 repository = "https://github.com/rust-embedded/cortex-m-rt"
-version = "0.5.5"
+version = "0.5.6"
 
 [dependencies]
 cortex-m-rt = "0.6.1"
@@ -20,4 +20,4 @@ panic-abort = "0.2.0"
 cortex-m = "0.5.4"
 
 [features]
-device = []
+device = ["cortex-m-rt/device"]

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.5.6] - 2018-09-08
+
+### Fixed
+
+- The "device" feature.
+
 ## [v0.5.5] - 2018-09-07
 
 ### Changed
@@ -357,7 +363,8 @@ section                size        addr
 
 Initial release
 
-[Unreleased]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.5.5...HEAD
+[Unreleased]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.5.6...HEAD
+[v0.5.6]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.5.5...v0.5.6
 [v0.5.5]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.5.4...v0.5.5
 [v0.5.4]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.5.3...v0.5.4
 [v0.5.3]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.5.2...v0.5.3
