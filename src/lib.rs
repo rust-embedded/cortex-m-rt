@@ -482,11 +482,6 @@ pub unsafe extern "C" fn Reset() -> ! {
     }
 
     extern "Rust" {
-        // RAM initialization routines. These are written in assembly because LLVM optimizations
-        // loop unroll pure Rust versions making them occupy too much Flash (~500 bytes)
-        fn __zero_bss(sbss: *mut u32, ebss: *mut u32);
-        fn __init_data(sdata: *mut u32, sidata: *const u32, edata: *mut u32);
-
         // This symbol will be provided by the user via `#[entry]`
         fn main() -> !;
 
@@ -497,6 +492,14 @@ pub unsafe extern "C" fn Reset() -> ! {
     __pre_init();
 
     // Initialize RAM
+    extern "C" {
+        // RAM initialization routines. These are written in assembly because LLVM optimizations
+        // loop unroll pure Rust versions making them occupy too much Flash (~500 bytes). And as a
+        // plus of using this approach RAM initialization will also be fast in unoptimized builds.
+        fn __zero_bss(sbss: *mut u32, ebss: *mut u32);
+        fn __init_data(sdata: *mut u32, sidata: *const u32, edata: *mut u32);
+    }
+
     __zero_bss(&mut __sbss, &mut __ebss);
     __init_data(&mut __sdata, &__sidata, &mut __edata);
 
