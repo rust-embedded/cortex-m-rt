@@ -1,16 +1,17 @@
 [package]
 authors = ["Jorge Aparicio <jorge@japaric.io>"]
 categories = ["embedded", "no-std"]
-description = "Minimal runtime / startup for Cortex-M microcontrollers"
-documentation = "https://docs.rs/cortex-m-rt"
+description = "Startup and minimal runtime for Cortex-M microcontrollers"
+documentation = "https://rust-embedded.github.io/cortex-m-rt"
 readme = "README.md"
 keywords = ["arm", "cortex-m", "runtime", "startup"]
 license = "MIT OR Apache-2.0"
 name = "cortex-m-rt"
-repository = "https://github.com/japaric/cortex-m-rt"
-version = "0.5.4"
+repository = "https://github.com/rust-embedded/cortex-m-rt"
+version = "0.5.5"
 
 [dependencies]
+cortex-m-rt = "0.6.1"
 r0 = "0.2.1"
 
 [dev-dependencies]
