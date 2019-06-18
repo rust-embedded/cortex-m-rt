@@ -42,6 +42,10 @@ INCLUDE device.x"#
         f
     };
 
+    // Write an empty `sections.x` file to be overwritten by the application if desired.
+    let mut f_sections = File::create(out.join("sections.x")).unwrap();
+    f_sections.write(b"\n").unwrap();
+
     let max_int_handlers = if target.starts_with("thumbv6m-") {
         println!("cargo:rustc-cfg=cortex_m");
         println!("cargo:rustc-cfg=armv6m");

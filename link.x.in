@@ -145,6 +145,9 @@ SECTIONS
     *(.ARM.exidx.*);
     *(.ARM.extab.*);
   }
+
+  /* User-defined memory sections */
+  INCLUDE sections.x
 }
 
 /* Do not exceed this mark in the error messages below                                    | */
