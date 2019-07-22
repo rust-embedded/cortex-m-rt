@@ -37,7 +37,7 @@ panic-halt = "0.2.0"
 
 [dev-dependencies.rand]
 default-features = false
-version = "0.5.5"
+version = "0.7.0"
 
 [target.'cfg(not(target_os = "none"))'.dev-dependencies]
 compiletest_rs = "0.3.14"
