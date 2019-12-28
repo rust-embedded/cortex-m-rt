@@ -344,6 +344,7 @@ pub fn exception(args: TokenStream, input: TokenStream) -> TokenStream {
             let ident = &f.sig.ident;
 
             quote!(
+                #[doc(hidden)]
                 #[export_name = #ident_s]
                 pub unsafe extern "C" fn #tramp_ident() {
                     extern crate core;
@@ -396,6 +397,7 @@ pub fn exception(args: TokenStream, input: TokenStream) -> TokenStream {
             let ident = &f.sig.ident;
 
             quote!(
+                #[doc(hidden)]
                 #[export_name = "HardFault"]
                 #[link_section = ".HardFault.user"]
                 pub unsafe extern "C" fn #tramp_ident(frame: &::cortex_m_rt::ExceptionFrame) {
@@ -482,6 +484,7 @@ pub fn exception(args: TokenStream, input: TokenStream) -> TokenStream {
                 .collect::<Vec<_>>();
 
             quote!(
+                #[doc(hidden)]
                 #[export_name = #ident_s]
                 pub unsafe extern "C" fn #tramp_ident() {
                     #ident(
@@ -652,6 +655,7 @@ pub fn interrupt(args: TokenStream, input: TokenStream) -> TokenStream {
         .collect::<Vec<_>>();
 
     quote!(
+        #[doc(hidden)]
         #[export_name = #ident_s]
         pub unsafe extern "C" fn #tramp_ident() {
             #ident(
