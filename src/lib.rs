@@ -410,7 +410,7 @@ use core::sync::atomic::{self, Ordering};
 #[doc(inline)]
 pub use macros::interrupt;
 #[doc(inline)]
-pub use macros::{entry, exception, pre_init};
+pub use macros::{entry, exception, pre_init, uninit};
 
 #[export_name = "error: cortex-m-rt appears more than once in the dependency graph"]
 #[doc(hidden)]

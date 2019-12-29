@@ -2,7 +2,7 @@
 //!
 //! Do not use this crate directly.
 
-#![deny(warnings)]
+// #![deny(warnings)]
 
 extern crate proc_macro;
 
@@ -13,8 +13,49 @@ use std::collections::HashSet;
 use std::iter;
 use syn::{
     parse, parse_macro_input, spanned::Spanned, AttrStyle, Attribute, FnArg, Ident, Item, ItemFn,
-    ItemStatic, ReturnType, Stmt, Type, Visibility,
+    ItemStatic, ReturnType, Stmt, Type, Visibility, Expr
 };
+
+#[proc_macro_attribute]
+pub fn uninit(args: TokenStream, input: TokenStream) -> TokenStream {
+    let f = parse_macro_input!(input as ItemStatic);
+
+    // println!("expansion: {:#?}", f);
+
+    // check the function signature
+    let valid_signature =
+        f.vis == Visibility::Inherited
+        && f.mutability.is_some()
+        && match *f.expr {
+            Expr::Tuple(ref tup) => tup.elems.is_empty(),
+            _ => false,
+        };
+
+    if !valid_signature {
+        return parse::Error::new(
+            f.span(),
+            "`#[uninit]` statics must have signature `static mut Name: Type = ()`",
+        )
+        .to_compile_error()
+        .into();
+    }
+
+    if !args.is_empty() {
+        return parse::Error::new(Span::call_site(), "This attribute accepts no arguments")
+            .to_compile_error()
+            .into();
+    }
+
+    let name = f.ident;
+    let ty = f.ty;
+
+    let section = format!(".uninit.{}", name);
+
+    quote!(
+        #[link_section = #section]
+        static mut #name: core::mem::MaybeUninit<#ty> = core::mem::MaybeUninit::uninit();
+    ).into()
+}
 
 /// Attribute to declare the entry point of the program
 ///
