@@ -63,12 +63,6 @@ script:
 
 after_script: set +e
 
-branches:
-  only:
-    - master
-    - staging
-    - trying
-
 notifications:
   email:
     on_success: never
