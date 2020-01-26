@@ -12,12 +12,12 @@ license = "MIT OR Apache-2.0"
 name = "cortex-m-rt"
 readme = "README.md"
 repository = "https://github.com/rust-embedded/cortex-m-rt"
-version = "0.6.11"
+version = "0.6.12"
 autoexamples = true
 
 [dependencies]
 r0 = "0.2.2"
-cortex-m-rt-macros = { path = "macros", version = "0.1" }
+cortex-m-rt-macros = { path = "macros", version = "=0.1.8" }
 
 [dev-dependencies]
 cortex-m = "0.6"
@@ -29,6 +29,10 @@ compiletest_rs = "0.4.0"
 
 [[example]]
 name = "device"
+required-features = ["device"]
+
+[[example]]
+name = "warnings"
 required-features = ["device"]
 
 [[test]]
