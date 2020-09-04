@@ -1,3 +1,5 @@
+  .cfi_sections .debug_frame
+
   # LLD requires that the section flags are explicitly set here
   .section .HardFaultTrampoline, "ax"
   .global HardFaultTrampoline
@@ -5,6 +7,7 @@
   # get set and an invalid vector table is generated
   .type HardFaultTrampoline,%function
   .thumb_func
+  .cfi_startproc
 HardFaultTrampoline:
   # depending on the stack mode in EXC_RETURN, fetch stack pointer from
   # PSP or MSP
@@ -17,6 +20,8 @@ HardFaultTrampoline:
 0:
   mrs r0, PSP
   b HardFault
+  .cfi_endproc
+  .size HardFaultTrampoline, . - HardFaultTrampoline
 
   # ARMv6-M leaves LR in an unknown state on Reset
   # this trampoline sets LR before it's pushed onto the stack by Reset
@@ -26,8 +31,11 @@ HardFaultTrampoline:
   # get set and an invalid vector table is generated
   .type PreResetTrampoline,%function
   .thumb_func
+  .cfi_startproc
 PreResetTrampoline:
   # set LR to the initial value used by the ARMv7-M (0xFFFF_FFFF)
   ldr r0,=0xffffffff
   mov lr,r0
   b Reset
+  .cfi_endproc
+  .size PreResetTrampoline, . - PreResetTrampoline
