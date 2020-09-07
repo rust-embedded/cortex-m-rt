@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- (ARMv6-M) Set LR value to a known value on reset (as the ARM spec requires)
+- Added CFI and size info to external assembly subroutines (`HardFaultTrampoline`)
+
 ## [v0.6.12] - 2020-01-26
 
 ### Fixed
