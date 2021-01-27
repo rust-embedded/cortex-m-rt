@@ -480,7 +480,7 @@ pub fn heap_start() -> *mut u32 {
 
 /* Entry point */
 #[doc(hidden)]
-#[link_section = ".vector_table.reset_vector"]
+#[cfg_attr(cortex_m, link_section = ".vector_table.reset_vector")]
 #[no_mangle]
 #[cfg(not(armv6m))]
 pub static __RESET_VECTOR: unsafe extern "C" fn() -> ! = Reset;
@@ -492,7 +492,7 @@ pub static __RESET_VECTOR: unsafe extern "C" fn() -> ! = Reset;
 pub static __RESET_VECTOR: unsafe extern "C" fn() -> ! = PreResetTrampoline;
 
 #[doc(hidden)]
-#[link_section = ".Reset"]
+#[cfg_attr(cortex_m, link_section = ".Reset")]
 #[no_mangle]
 pub unsafe extern "C" fn Reset() -> ! {
     extern "C" {
@@ -554,7 +554,7 @@ pub unsafe extern "C" fn Reset() -> ! {
 
 #[allow(unused_variables)]
 #[doc(hidden)]
-#[link_section = ".HardFault.default"]
+#[cfg_attr(cortex_m, link_section = ".HardFault.default")]
 #[no_mangle]
 pub unsafe extern "C" fn HardFault_(ef: &ExceptionFrame) -> ! {
     loop {
@@ -644,7 +644,7 @@ pub union Vector {
 }
 
 #[doc(hidden)]
-#[link_section = ".vector_table.exceptions"]
+#[cfg_attr(cortex_m, link_section = ".vector_table.exceptions")]
 #[no_mangle]
 pub static __EXCEPTIONS: [Vector; 14] = [
     // Exception 2: Non Maskable Interrupt.
@@ -704,7 +704,7 @@ pub static __EXCEPTIONS: [Vector; 14] = [
 // to the default handler
 #[cfg(all(any(not(feature = "device"), test), not(armv6m)))]
 #[doc(hidden)]
-#[link_section = ".vector_table.interrupts"]
+#[cfg_attr(cortex_m, link_section = ".vector_table.interrupts")]
 #[no_mangle]
 pub static __INTERRUPTS: [unsafe extern "C" fn(); 240] = [{
     extern "C" {
@@ -717,7 +717,7 @@ pub static __INTERRUPTS: [unsafe extern "C" fn(); 240] = [{
 // ARMv6-M can only have a maximum of 32 device specific interrupts
 #[cfg(all(not(feature = "device"), armv6m))]
 #[doc(hidden)]
-#[link_section = ".vector_table.interrupts"]
+#[cfg_attr(cortex_m, link_section = ".vector_table.interrupts")]
 #[no_mangle]
 pub static __INTERRUPTS: [unsafe extern "C" fn(); 32] = [{
     extern "C" {
