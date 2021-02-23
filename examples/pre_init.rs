@@ -9,8 +9,8 @@ extern crate panic_halt;
 
 use rt::{entry, pre_init};
 
-#[pre_init]
-unsafe fn disable_watchdog() {
+#[pre_init(unsafe)]
+fn disable_watchdog() {
     // Do what you need to disable the watchdog.
 }
 
