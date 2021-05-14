@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-(no entries)
+- Backport: Allow building the crate for macOS targets ([#306], [#310]).
 
 ## [v0.6.13] - 2020-09-07
 
