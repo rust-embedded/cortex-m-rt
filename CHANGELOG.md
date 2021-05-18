@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.6.14] - 2021-05-19
+
+### Fixed
+
 - Backport: Allow building the crate for macOS targets ([#306], [#310]).
+
+[#306]: https://github.com/rust-embedded/cortex-m-rt/issues/306
+[#310]: https://github.com/rust-embedded/cortex-m-rt/issues/310
 
 ## [v0.6.13] - 2020-09-07
 
@@ -483,7 +490,8 @@ section                size        addr
 
 Initial release
 
-[Unreleased]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.13...HEAD
+[Unreleased]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.14...HEAD
+[v0.6.14]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.13...v0.6.14
 [v0.6.13]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.12...v0.6.13
 [v0.6.12]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.11...v0.6.12
 [v0.6.11]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.10...v0.6.11
