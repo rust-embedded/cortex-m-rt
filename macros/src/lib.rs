@@ -399,7 +399,10 @@ pub fn exception(args: TokenStream, input: TokenStream) -> TokenStream {
             quote!(
                 #[doc(hidden)]
                 #[export_name = "HardFault"]
-                #[link_section = ".HardFault.user"]
+                // Only emit link_section when building for embedded targets,
+                // because some hosted platforms (used to check the build)
+                // cannot handle the long link section names.
+                #[cfg_attr(target_os = "none", link_section = ".HardFault.user")]
                 pub unsafe extern "C" fn #tramp_ident(frame: &::cortex_m_rt::ExceptionFrame) {
                     #ident(frame)
                 }
