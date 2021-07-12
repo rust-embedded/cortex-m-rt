@@ -7,7 +7,27 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [v0.6.14] - 2021-05-19
+## Backport release: [v0.6.15] - 2021-07-12
+
+### Fixed
+
+- Backport: Mark .bss as NOLOAD ([#265])
+- Backport: Fix possible overflow of .data region ([#286])
+- Backport: Perform volatile reads of ICSR in DefaultHandler (#[315])
+
+### Other
+- Backport: Use `links` in Cargo.toml to prevent multiple linking of
+  cortex-m-rt (#276)
+- Backport: Use same verison for macros crate as for cortex-m-rt itself
+  ([#245])
+
+[#245]: https://github.com/rust-embedded/cortex-m-rt/pull/245
+[#265]: https://github.com/rust-embedded/cortex-m-rt/pull/265
+[#276]: https://github.com/rust-embedded/cortex-m-rt/pull/276
+[#286]: https://github.com/rust-embedded/cortex-m-rt/pull/286
+[#315]: https://github.com/rust-embedded/cortex-m-rt/pull/315
+
+## Backport release: [v0.6.14] - 2021-05-19
 
 ### Fixed
 
@@ -16,14 +36,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [#306]: https://github.com/rust-embedded/cortex-m-rt/issues/306
 [#310]: https://github.com/rust-embedded/cortex-m-rt/issues/310
 
-## [v0.6.13] - 2020-09-07
+## Backport release: [v0.6.13] - 2020-09-07
 
 ### Fixed
 
 - (ARMv6-M) Set LR value to a known value on reset (as the ARM spec requires)
 - Added CFI and size info to external assembly subroutines (`HardFaultTrampoline`)
 
-## [v0.6.12] - 2020-01-26
+## Backport release: [v0.6.12] - 2020-01-26
 
 ### Fixed
 
@@ -490,7 +510,8 @@ section                size        addr
 
 Initial release
 
-[Unreleased]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.14...HEAD
+[Unreleased]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.11...HEAD
+[v0.6.15]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.14...v0.6.15
 [v0.6.14]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.13...v0.6.14
 [v0.6.13]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.12...v0.6.13
 [v0.6.12]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.11...v0.6.12
