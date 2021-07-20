@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Other
 - Backport: Use `links` in Cargo.toml to prevent multiple linking of
   cortex-m-rt (#276)
-- Backport: Use same verison for macros crate as for cortex-m-rt itself
+- Backport: Use same version for macros crate as for cortex-m-rt itself
   ([#245])
 
 [#245]: https://github.com/rust-embedded/cortex-m-rt/pull/245
@@ -510,7 +510,7 @@ section                size        addr
 
 Initial release
 
-[Unreleased]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.11...HEAD
+[Unreleased]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.15...v0.6.x
 [v0.6.15]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.14...v0.6.15
 [v0.6.14]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.13...v0.6.14
 [v0.6.13]: https://github.com/rust-embedded/cortex-m-rt/compare/v0.6.12...v0.6.13
