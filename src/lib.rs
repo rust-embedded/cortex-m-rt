@@ -170,7 +170,7 @@
 //! lets you distinguish how much space is taking the vector table in Flash vs how much is being
 //! used by actual instructions (`.text`) and constants (`.rodata`).
 //!
-//! ```
+//! ``` text
 //! $ size -Ax target/thumbv7m-none-eabi/examples/app
 //! target/thumbv7m-none-eabi/release/examples/app  :
 //! section             size         addr
@@ -184,7 +184,7 @@
 //! Without the `-A` argument `size` reports the sum of the sizes of `.text`, `.rodata` and
 //! `.vector_table` under "text".
 //!
-//! ```
+//! ``` text
 //! $ size target/thumbv7m-none-eabi/examples/app
 //!   text    data     bss     dec     hex filename
 //!   1160       0       0    1660     67c target/thumbv7m-none-eabi/release/app
@@ -416,7 +416,7 @@ pub use macros::{entry, exception, pre_init};
 #[doc(hidden)]
 pub static __ONCE__: () = ();
 
-/// Registers stacked (pushed into the stack) during an exception
+/// Registers stacked (pushed onto the stack) during an exception.
 #[derive(Clone, Copy)]
 #[repr(C)]
 pub struct ExceptionFrame {
