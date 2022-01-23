@@ -44,6 +44,21 @@ Reset:
   ldr r4,=0xffffffff
   mov lr,r4
 
+  # Some faulty debuggers fake a reset by jumping to the reset vector
+  # without triggering a system reset, leaving the stack pointer at
+  # its previous value. To ensure consistency, set MSP ourselves here.
+  ldr r0,=_stack_start
+  msr msp,r0
+
+  # Some buggy bootloaders do not set VTOR when jumping to application
+  # code, which leaves a very hard-to-debug issue where everything works
+  # except your interrupt handlers. We manually set VTOR here to avoid
+  # this issue. The VTOR register is optional on ARMv6-M, but when not
+  # present must be RAZ,WI and is therefore safe to write to.
+  ldr r0,=0xe000ed08
+  ldr r1,=__vector_table
+  str r1,[r0]
+
   # Run user pre-init code, which must be executed immediately after startup,
   # before the potentially time-consuming memory initialisation takes place.
   # Example use cases include disabling default watchdogs or enabling RAM.

@@ -68,6 +68,7 @@ SECTIONS
   {
     /* Initial Stack Pointer (SP) value */
     LONG(_stack_start);
+    __vector_table = .;
 
     /* Reset vector */
     KEEP(*(.vector_table.reset_vector)); /* this is the `__RESET_VECTOR` symbol */
