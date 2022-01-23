@@ -63,8 +63,11 @@ SECTIONS
   PROVIDE(_stack_start = ORIGIN(RAM) + LENGTH(RAM));
 
   /* ## Sections in FLASH */
+  
+  PROVIDE(_svector_table = ORIGIN(FLASH));
+  
   /* ### Vector table */
-  .vector_table ORIGIN(FLASH) :
+  .vector_table _svector_table :
   {
     /* Initial Stack Pointer (SP) value */
     LONG(_stack_start);
