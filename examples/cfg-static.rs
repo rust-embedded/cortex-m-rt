@@ -11,15 +11,18 @@ extern crate panic_halt;
 use rt::{entry, exception};
 
 #[entry]
-fn main() -> ! {
+fn main(
     #[cfg(never)]
-    static mut COUNT: u32 = 0;
-
+    #[init(0)]
+    count: &mut u32,
+) -> ! {
     loop {}
 }
 
-#[exception]
-fn SysTick() {
+#[exception(SysTick)]
+fn on_systick(
     #[cfg(never)]
-    static mut FOO: u32 = 0;
+    #[init(0)]
+    foo: &mut u32,
+) {
 }

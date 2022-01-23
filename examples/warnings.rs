@@ -13,8 +13,7 @@ extern crate panic_halt;
 
 use cortex_m_rt::{entry, exception, interrupt, pre_init, ExceptionFrame};
 
-#[allow(non_camel_case_types)]
-enum interrupt {
+enum Interrupt {
     INT,
 }
 
@@ -33,8 +32,8 @@ union Vector {
 static __INTERRUPTS: [Vector; 1] = [Vector { handler: INT }];
 
 /// Dummy interrupt.
-#[interrupt]
-fn INT() {}
+#[interrupt(Interrupt::INT)]
+fn interrupt_handler(#[init(0)] resource: &mut u8) {}
 
 #[exception]
 fn HardFault(_eh: &ExceptionFrame) -> ! {
