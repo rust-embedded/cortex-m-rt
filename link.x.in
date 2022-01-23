@@ -181,6 +181,14 @@ SECTIONS
     KEEP(*(.got .got.*));
   }
 
+  /* ## .note */
+  /* Info section used for storing notes or related data in the binary. This is not loaded, only
+     available in the final elf. */
+  .note (INFO) :
+  {
+    KEEP(*(.note .note.*));
+  }
+
   /* ## Discarded sections */
   /DISCARD/ :
   {
